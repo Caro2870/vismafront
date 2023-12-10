@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useCallback } from 'react';
 import { Table } from 'antd';
 import axiosInstance from '../../services/axiosInstance';
 
@@ -62,6 +62,13 @@ const rowSelection = {
 const ListaDivisiones = ({ searchValue, selectedValue }) => {
   const [selectionType] = useState('checkbox');
   const [divisiones, setDivisiones] = useState([]);
+  const [pagination, setPagination] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+     
+    },
+  });
   const [loading, setLoading] = useState(true);
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -70,27 +77,36 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
      
     },
   });
+
+
+
+
+
   const fetchData = () => {
+    console.log('fetchData',pagination);
     setLoading(true);
 
 
-    const url = `/divisiones/listar?per_page=${tableParams.pagination.pageSize}&page=${tableParams.pagination.current}&search=${searchValue}&column=${selectedValue}`;
+    const url = `/divisiones/listar?per_page=${pagination.pagination.pageSize}&page=${pagination.pagination.current}&search=${searchValue}&column=${selectedValue}`;
 
     axiosInstance
       .get(url)
       .then((response) => {
-     
+        console.log('response',response);
+       
         setDivisiones(response.data.divisiones.data);
+        let pagination = {
+          current: response.data.divisiones.current_page,
+          pageSize :response.data.divisiones.per_page,
+          total: response.data.divisiones.total,
+        };
         setTableParams({
           ...tableParams,
-          pagination: {
-            current: response.data.divisiones.current_page,
-            pageSize :response.data.divisiones.per_page,
-            total: response.data.divisiones.total,
-          },
+            pagination
         });
+        setPagination(pagination)
      
-        
+        console.log('paginationasdasd',pagination);
         setLoading(false);
       })
       .catch((error) => {
@@ -99,10 +115,11 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
       });
   };
 
-  useEffect(() => {
-    fetchData(); // Corregir aquí
-  }, [searchValue,JSON.stringify(tableParams)]);
 
+    useEffect(() => {
+       fetchData();
+    }, [searchValue,pagination]);
+  
   if (!divisiones) {
     return <div>Cargando datos...</div>;
   }
@@ -145,14 +162,17 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   
   
   const handleTableChange = (pagination, filters, sorter) => {
+    console.log('handleTableChange',pagination);
     setTableParams({
       pagination,
       filters,
       ...sorter,
     });
-
+    console.log('handleTableChange2',tableParams);
+    console.log('handleTableChange3',divisiones);
+  
     // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== divisiones.pagination?.pageSize) {
+    if (pagination.pageSize !== pagination.pagination?.pageSize) {
       setDivisiones([]);
     }
   };
