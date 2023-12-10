@@ -108,6 +108,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
 
   useEffect(() => {
     fetchData(); // Corregir aquí
+    // eslint-disable-next-line
   }, [searchValue,tableParamsString]);
 
   if (!divisiones) {
@@ -123,11 +124,11 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
       console.log(uniqueValues);
       return {
         ...column,
-        filters: uniqueValues.map((value) => ({ text:  value=='null'?'Sin nivel superior' : value, value :  value=='null'?'Sin nivel superior' : value })),
+        filters: uniqueValues.map((value) => ({ text:  value==='null'?'Sin nivel superior' : value, value :  value==='null'?'Sin nivel superior' : value })),
    
         onFilter: (value, record) => {
           
-          const recordValue = String(record[dataIndexString])=='null'?'Sin nivel superior':String(record[dataIndexString]);
+          const recordValue = String(record[dataIndexString])==='null'?'Sin nivel superior':String(record[dataIndexString]);
   
           // Validación y filtrado sin sensibilidad a mayúsculas y minúsculas, y aplicando trim solo a 'nombre' y 'division_superior_nombre'
           return typeof recordValue === 'string' && 
