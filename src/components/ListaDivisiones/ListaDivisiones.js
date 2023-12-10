@@ -10,6 +10,8 @@ const columns = [
     filters: [],
     sorter: (a, b) => a.nombre.localeCompare(b.nombre),
     sortDirections: ['descend', 'ascend'],
+    onFilter: (value, record) => record.nombre.indexOf(value) === 0,
+
   },
   {
     title: 'Division Superior',
@@ -87,7 +89,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
             total: response.data.divisiones.total,
           },
         });
-
+        updatedColumns()
         setLoading(false);
       })
       .catch((error) => {
@@ -103,6 +105,44 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   if (!divisiones) {
     return <div>Cargando datos...</div>;
   }
+
+  const updatedColumns = columns.map((column) => {
+    const dataIndexString = String(column.dataIndex);
+  
+    if (dataIndexString === 'nombre' || dataIndexString === 'division_superior_nombre') {
+      const uniqueValues = Array.from(new Set(divisiones.map((item) => item[dataIndexString])));
+      return {
+        ...column,
+        filters: uniqueValues.map((value) => ({ text: value, value })),
+        onFilter: (value, record) => {
+          
+          const recordValue = record[dataIndexString];
+  
+          // Validación y filtrado sin sensibilidad a mayúsculas y minúsculas, y aplicando trim solo a 'nombre' y 'division_superior_nombre'
+          return typeof recordValue === 'string' && recordValue.trim().toLowerCase().includes(String(value).trim().toLowerCase());
+        },
+      };
+    } else if (dataIndexString === 'nivel') {
+      const uniqueValues = Array.from(new Set(divisiones.map((item) => item[dataIndexString])));
+      return {
+        ...column,
+        filters: uniqueValues.map((value) => ({ text: value, value })),
+        onFilter: (value, record) => {
+          const recordValue = record[dataIndexString];
+  
+          // Validación y filtrado para 'nivel' como número entero
+          return typeof recordValue === 'string' && recordValue.toString() === value;
+        },
+      };
+    }
+    return column;
+  });
+  
+  
+  
+  
+  
+  
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -127,7 +167,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
           type: selectionType,
           ...rowSelection,
         }}
-        columns={columns}
+        columns={updatedColumns }
         dataSource={divisiones}
         pagination={tableParams.pagination}
         loading={loading}
