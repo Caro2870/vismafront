@@ -89,7 +89,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
             total: response.data.divisiones.total,
           },
         });
-        updatedColumns()
+     
         setLoading(false);
       })
       .catch((error) => {
