@@ -63,6 +63,14 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   const [selectionType] = useState('checkbox');
   const [divisiones, setDivisiones] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tableParamsString, setTableParamsString] =useState({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+     
+    },
+  });
+
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -90,7 +98,6 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
           },
         });
      
-        
         setLoading(false);
       })
       .catch((error) => {
@@ -101,7 +108,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
 
   useEffect(() => {
     fetchData(); // Corregir aquí
-  }, [searchValue,JSON.stringify(tableParams)]);
+  }, [searchValue,tableParamsString]);
 
   if (!divisiones) {
     return <div>Cargando datos...</div>;
@@ -150,6 +157,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
       filters,
       ...sorter,
     });
+    setTableParamsString(JSON.stringify(tableParams))
 
     // `dataSource` is useless since `pageSize` changed
     if (pagination.pageSize !== divisiones.pagination?.pageSize) {
