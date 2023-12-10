@@ -116,33 +116,25 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
 
   const updatedColumns = columns.map((column) => {
     const dataIndexString = String(column.dataIndex);
+    console.log(dataIndexString);
   
-    if (dataIndexString === 'nombre' || dataIndexString === 'division_superior_nombre') {
-      const uniqueValues = Array.from(new Set(divisiones.map((item) => item[dataIndexString])));
+    if (dataIndexString === 'nombre' || dataIndexString === 'division_superior_nombre' || dataIndexString === 'nivel') {
+      const uniqueValues = Array.from(new Set(divisiones.map((item) => String(item[dataIndexString]))));
+      console.log(uniqueValues);
       return {
         ...column,
-        filters: uniqueValues.map((value) => ({ text: value, value })),
+        filters: uniqueValues.map((value) => ({ text:  value=='null'?'Sin nivel superior' : value, value :  value=='null'?'Sin nivel superior' : value })),
+   
         onFilter: (value, record) => {
           
-          const recordValue = record[dataIndexString];
+          const recordValue = String(record[dataIndexString])=='null'?'Sin nivel superior':String(record[dataIndexString]);
   
           // Validación y filtrado sin sensibilidad a mayúsculas y minúsculas, y aplicando trim solo a 'nombre' y 'division_superior_nombre'
-          return typeof recordValue === 'string' && recordValue.trim().toLowerCase().includes(String(value).trim().toLowerCase());
+          return typeof recordValue === 'string' && 
+          recordValue.trim().toLowerCase().includes(String(value).trim().toLowerCase());
         },
       };
-    } else if (dataIndexString === 'nivel') {
-      const uniqueValues = Array.from(new Set(divisiones.map((item) => item[dataIndexString])));
-      return {
-        ...column,
-        filters: uniqueValues.map((value) => ({ text: value, value })),
-        onFilter: (value, record) => {
-          const recordValue = record[dataIndexString];
-  
-          // Validación y filtrado para 'nivel' como número entero
-          return typeof recordValue === 'string' && recordValue.toString() === value;
-        },
-      };
-    }
+    } 
     return column;
   });
   
