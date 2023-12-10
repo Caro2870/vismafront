@@ -90,6 +90,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
           },
         });
      
+        
         setLoading(false);
       })
       .catch((error) => {
