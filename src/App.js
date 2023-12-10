@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Row, Col, Tabs, Radio, Space, Avatar, Select, Input } from 'antd';
 import ListaDivisiones from './components/ListaDivisiones/ListaDivisiones.js';
 import './App.less';
@@ -14,40 +14,33 @@ import LupaSvg from './components/svg/LupaSvg.js';
 import columns from './components/ListaDivisiones/fields.js';
 
 const App = () => {
-  const [activeKey, setActiveKey] = useState('1');
   const [tabPosition, setTabPosition] = useState('listado');
   const [clickedKey, setAdditionalData] = useState('3');
 
   const [searchValue, setSearchValue] = useState('');
-  
+
   const [selectedValue, setSelectedValue] = useState(null);
 
   const filterOption = (input, option) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
-    const onChangeSelect = (value) => {
-      setSelectedValue(value);
-      console.log(`Selected value: ${value}`);
-      // Puedes realizar otras acciones con el valor seleccionado si es necesario
-    };
+  const onChangeSelect = (value) => {
+    setSelectedValue(value);
+    console.log(`Selected value: ${value}`);
+    // Puedes realizar otras acciones con el valor seleccionado si es necesario
+  };
   const onSearchSelect = (value) => {
     console.log('search:', value);
   };
 
   const onChange = (key) => {
-    setActiveKey(key);
   };
 
-  const items = [
-    {
-      key: '1',
-      label: 'Divisiones',
-    },
-    {
-      key: '2',
-      label: 'Colaboradores',
-    },
-  ];
+
+  useEffect(() => {
+    console.log('searchValue:');
+  }, []);
+
 
   const menuItems = [
     { id: 'dashboard', key: '1', label: 'Dashboard', onClick: () => onWordClick('1'), haveIcon: false },
@@ -59,7 +52,55 @@ const App = () => {
   const changeTabPosition = (e) => {
     setTabPosition(e.target.value);
   };
+  const items = [
+    {
+      key: '1',
+      label: 'Divisiones',
+      children: (
+        <React.Fragment>
+          <Row>
+            <Col span={12}>
+              {/* Contenido del primer Col */}
+              <Radio.Group value={tabPosition} onChange={changeTabPosition}>
+                <Radio.Button value="listado">Listado</Radio.Button>
+                <Radio.Button value="arbol">Árbol</Radio.Button>
+              </Radio.Group>
+            </Col>
+            <Col span={12}>
+              <div className="my-flex-container">
+                {/* Contenido del segundo Col */}
+                <Select
+                  showSearch
+                  placeholder="Columnas"
+                  optionFilterProp="children"
+                  onChange={onChangeSelect}
+                  onSearch={onSearchSelect}
+                  filterOption={filterOption}
+                  options={columns}
+                />
+                <Input
+                  placeholder="Buscar"
+                  className="search-input"
+                  suffix={<LupaSvg style={{ color: 'rgba(0,0,0,.45)' }} />}
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+              </div>
+            </Col>
+          </Row>
 
+          {tabPosition === 'listado' && (
+            <ListaDivisiones searchValue={searchValue} selectedValue={selectedValue} />
+          )}
+          {/* Agrega otras condiciones según sea necesario para diferentes tabs y modos */}
+        </React.Fragment>
+      ),
+    },
+    {
+      key: '2',
+      label: 'Colaboradores',
+    },
+  ];
   const onWordClick = (e) => {
     setAdditionalData(e);
   };
@@ -81,52 +122,8 @@ const App = () => {
               </div>
             </div>
 
-            <Tabs defaultActiveKey="1" activeKey={activeKey} onChange={onChange}>
-              {items.map((item) => (
-                <Tabs.TabPane key={item.key} tab={item.label}>
-                  {activeKey === '1' && (
+            <Tabs defaultActiveKey="1" items={items} onChange={onChange}>
 
-                    <Row>
-                      <Col span={12}>
-                        {/* Contenido del primer Col */}
-                        <Radio.Group value={tabPosition} onChange={changeTabPosition}>
-                          <Radio.Button value="listado">Listado</Radio.Button>
-                          <Radio.Button value="arbol">Árbol</Radio.Button>
-                        </Radio.Group>
-                      </Col>
-                      <Col span={12}>
-                        <div className="my-flex-container">
-                          {/* Contenido del segundo Col */}
-                          <Select
-                            showSearch
-                            placeholder="Columnas"
-                            optionFilterProp="children"
-                            onChange={onChangeSelect}
-                            onSearch={onSearchSelect}
-                            filterOption={filterOption}
-                            options={columns}
-                          />
-                          <Input
-                            placeholder="Buscar"
-                            className="search-input"
-                            suffix={<LupaSvg style={{ color: 'rgba(0,0,0,.45)' }} />}
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                          />
-                        </div>
-
-                      </Col>
-                    </Row>
-
-
-                  )}
-                  {activeKey === '1' && tabPosition === 'listado' &&    
-  
-     <ListaDivisiones searchValue={searchValue} selectedValue={selectedValue} />
-}
-                  {/* Agrega otras condiciones según sea necesario para diferentes tabs y modos */}
-                </Tabs.TabPane>
-              ))}
             </Tabs>
           </div>
         </React.Fragment>
