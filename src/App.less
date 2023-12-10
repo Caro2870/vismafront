@@ -1,0 +1,139 @@
+// MyComponent.less
+
+.menu-item {
+
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: 'Segoe UI';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(255, 255, 255, 1);
+  margin: 8px;  
+}
+
+
+
+// Estilos para el cuadro alrededor de las palabras span
+.selected-tab {
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 4px 4px 6px 6px;
+  z-index: 5;
+  position: relative;
+  border-radius: 8px; /* Ajusta el valor según sea necesario */
+}
+
+.selected-tab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 1;
+  border-radius: 6px; /* Ajusta el valor según sea necesario */
+}
+
+
+
+
+
+.centered-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;  // Asegúrate de que el contenedor tenga una altura del 100%
+}
+
+.centered-content {
+  text-align: center;
+}
+
+.my-icon {
+  font-size: 24px;
+}
+
+.my-divider {
+  margin-right: 8px;  // Ajusta según sea necesario
+  border-right: 1px solid #ffffff;  // Ajusta el color y grosor según sea necesario
+  padding-right: 13px;  // Ajusta según sea necesario
+}
+
+.search-input{
+  margin-left: 20px;
+  width: 200px;
+}
+
+.my-user-image,
+.my-other-image {
+  width: 50px; // Ajusta el tamaño según sea necesario
+  height: auto; // Para mantener la proporción de la imagen
+}
+.my-flex-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.my-flex-container-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.container{
+  margin: 20px;
+}
+.my-title{
+  font-family: Segoe UI;
+font-size: 16px;
+font-weight: 600;
+line-height: 21px;
+letter-spacing: 0em;
+text-align: left;
+color: rgba(85, 81, 85, 1);
+font-weight: bold;
+
+}
+
+
+.my-flecha {
+  padding-right: 10px; // Ajusta el espacio entre el icono y la línea según sea necesario
+  padding-left: 10px; // Ajusta el espacio entre el icono y la línea según sea necesario
+}
+.my-avatar {
+  font-size: 24px;
+  padding-right: 10px; // Ajusta el espacio entre el icono y la línea según sea necesario
+  padding-left: 10px; // Ajusta el espacio entre el icono y la línea según sea necesario
+ 
+}
+
+.my-logo{
+  padding-right: 10px; // Ajusta el espacio entre el icono y la línea según sea necesario
+  padding-left: 10px; // Ajusta el espacio entre el icono y la línea según sea necesario
+  padding-top: 5px;
+}
+
+.my-name {
+  font-family: 'Segoe UI';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(255, 255, 255, 1);
+  padding: 8px; // Ajusta según sea necesario
+}
+
+.row-background {
+  background: linear-gradient(90deg,  rgba(46, 82, 248, 1) 0%, rgba(86, 167, 242, 1) 100%, rgba(255, 255, 255, 0) 100%);
+  padding: 8px;  /* Ajusta según sea necesario */
+  box-shadow: 1px 0px 4px 0px #00000026;  /* Ajusta según sea necesario */
+  // Otras propiedades de estilo que desees aplicar
+}
+
+
