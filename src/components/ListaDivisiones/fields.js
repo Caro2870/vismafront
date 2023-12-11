@@ -20,7 +20,7 @@ const columns = [
     },
     {
         label: 'Subdivisiones',
-        value: ' ',
+        value: 'subdivisiones',
     },
     {
         label: 'Embajador Nombre',

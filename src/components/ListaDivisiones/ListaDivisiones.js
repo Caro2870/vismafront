@@ -124,7 +124,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   useEffect(() => {
     fetchData(); // Corregir aquí
     // eslint-disable-next-line
-  }, [searchValue, tableParamsString]);
+  }, [searchValue, tableParamsString, selectedValue]);
 
   if (!divisiones) {
     return <div>Cargando datos...</div>;
