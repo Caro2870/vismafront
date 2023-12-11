@@ -17,7 +17,13 @@ const columns = [
     title: 'Division Superior',
     dataIndex: 'division_superior_nombre',
     key: 'division_superior_nombre',
-    sorter: (a, b) => a.division_superior_nombre.localeCompare(b.division_superior_nombre),
+    sorter: (a, b) => {
+      const divisionSuperiorNombreA = a.division_superior_nombre || ''; // Si es nulo, usa una cadena vacía
+      const divisionSuperiorNombreb = b.division_superior_nombre || ''; // Si es nulo, usa una cadena vacía
+    
+      return divisionSuperiorNombreA.localeCompare(divisionSuperiorNombreb  );
+    },
+    
     sortDirections: ['descend', 'ascend'],
   },
   {
