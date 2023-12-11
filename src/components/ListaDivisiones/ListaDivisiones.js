@@ -20,10 +20,10 @@ const columns = [
     sorter: (a, b) => {
       const divisionSuperiorNombreA = a.division_superior_nombre || ''; // Si es nulo, usa una cadena vacía
       const divisionSuperiorNombreb = b.division_superior_nombre || ''; // Si es nulo, usa una cadena vacía
-    
-      return divisionSuperiorNombreA.localeCompare(divisionSuperiorNombreb  );
+
+      return divisionSuperiorNombreA.localeCompare(divisionSuperiorNombreb);
     },
-    
+
     sortDirections: ['descend', 'ascend'],
   },
   {
@@ -37,7 +37,7 @@ const columns = [
     title: 'Nivel',
     dataIndex: 'nivel',
     key: 'nivel',
-    defaultSortOrder: 'descend',
+
     sorter: (a, b) => a.nivel - b.nivel,
     sortDirections: ['descend', 'ascend'],
   },
@@ -49,11 +49,11 @@ const columns = [
     sortDirections: ['descend', 'ascend'],
     render: (value) => (
       <Space size="subdivisiones">
-       <span className="underline-link">{value ?  value: '0' }</span>
+        <span className="underline-link">{value ? value : '0'}</span>
 
-        
-            <AnadirSvg />
-      
+
+        <AnadirSvg />
+
       </Space>
     ),
   },
@@ -132,11 +132,9 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
 
   const updatedColumns = columns.map((column) => {
     const dataIndexString = String(column.dataIndex);
-    console.log(dataIndexString);
 
     if (dataIndexString === 'nombre' || dataIndexString === 'division_superior_nombre' || dataIndexString === 'nivel') {
       const uniqueValues = Array.from(new Set(divisiones.map((item) => String(item[dataIndexString]))));
-      console.log(uniqueValues);
       return {
         ...column,
         filters: uniqueValues.map((value) => ({ text: value === 'null' ? 'Sin nivel superior' : value, value: value === 'null' ? 'Sin nivel superior' : value })),
@@ -160,42 +158,65 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
 
 
   const handleTableChange = (pagination, filters, sorter) => {
-    setTableParams({
-      pagination,
-      filters,
-      ...sorter,
-    });
-    setTableParamsString(JSON.stringify(tableParams))
+    console.log(sorter);
+    console.log(filters);
+    console.log(tableParams);
+    console.log(Object.keys(sorter).length === 0);
+    const algunValorLleno = Object.values(filters).some(valor => valor !== null && (Array.isArray(valor) ? valor.length > 0 : true));
+    console.log(algunValorLleno);
+    if (algunValorLleno) {
+      console.log(tableParams.pagination,'pagination');
+      setTableParams({
+        pagination: tableParams.pagination,
+        filters,
+        ...sorter,
+      });
+      setTableParamsString(JSON.stringify(tableParams))
 
-    // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== divisiones.pagination?.pageSize) {
-      setDivisiones([]);
+      console.log('no entre');
     }
+    else {
+      setTableParams({
+        pagination,
+        filters,
+        ...sorter,
+      });
+      setTableParamsString(JSON.stringify(tableParams))
+     console.log('entre');
+     
+    }
+ 
+
+      // `dataSource` is useless since `pageSize` changed
+      if (pagination.pageSize !== divisiones.pagination?.pageSize) {
+        console.log('entreasd');
+        setDivisiones([]);
+      }
+    };
+    return (
+      <div className='table-container'>
+        <Table
+
+
+
+          rowKey={(record) => record.id}
+
+          rowSelection={{
+            type: selectionType,
+            ...rowSelection,
+          }}
+          columns={updatedColumns}
+          dataSource={divisiones}
+          pagination={tableParams.pagination}
+          loading={loading}
+          onChange={handleTableChange}
+
+          scroll={{
+            y: 450,
+          }}
+        />
+      </div>
+    );
   };
-  return (
-    <div className='table-container'>
-      <Table
 
-
-
-        rowKey={(record) => record.id}
-
-        rowSelection={{
-          type: selectionType,
-          ...rowSelection,
-        }}
-        columns={updatedColumns}
-        dataSource={divisiones}
-        pagination={tableParams.pagination}
-        loading={loading}
-        onChange={handleTableChange}
-
-        scroll={{
-          y: 450,
-        }}
-      />
-    </div>
-  );
-};
-
-export default ListaDivisiones;
+  export default ListaDivisiones;
