@@ -15,7 +15,7 @@ import columns from './components/ListaDivisiones/fields.js';
 
 const App = () => {
   const [tabPosition, setTabPosition] = useState('listado');
-  const [clickedKey, setAdditionalData] = useState('3');
+  const [clickedKey, setAdditionalData] = useState('2');
 
   const [searchValue, setSearchValue] = useState('');
 

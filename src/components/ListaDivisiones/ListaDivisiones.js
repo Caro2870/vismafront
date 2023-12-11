@@ -63,11 +63,11 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   const [selectionType] = useState('checkbox');
   const [divisiones, setDivisiones] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tableParamsString, setTableParamsString] =useState({
+  const [tableParamsString, setTableParamsString] = useState({
     pagination: {
       current: 1,
       pageSize: 10,
-     
+
     },
   });
 
@@ -75,7 +75,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
     pagination: {
       current: 1,
       pageSize: 10,
-     
+
     },
   });
   const fetchData = () => {
@@ -87,17 +87,17 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
     axiosInstance
       .get(url)
       .then((response) => {
-     
+
         setDivisiones(response.data.divisiones.data);
         setTableParams({
           ...tableParams,
           pagination: {
             current: response.data.divisiones.current_page,
-            pageSize :response.data.divisiones.per_page,
+            pageSize: response.data.divisiones.per_page,
             total: response.data.divisiones.total,
           },
         });
-     
+
         setLoading(false);
       })
       .catch((error) => {
@@ -109,7 +109,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   useEffect(() => {
     fetchData(); // Corregir aquí
     // eslint-disable-next-line
-  }, [searchValue,tableParamsString]);
+  }, [searchValue, tableParamsString]);
 
   if (!divisiones) {
     return <div>Cargando datos...</div>;
@@ -118,32 +118,32 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
   const updatedColumns = columns.map((column) => {
     const dataIndexString = String(column.dataIndex);
     console.log(dataIndexString);
-  
+
     if (dataIndexString === 'nombre' || dataIndexString === 'division_superior_nombre' || dataIndexString === 'nivel') {
       const uniqueValues = Array.from(new Set(divisiones.map((item) => String(item[dataIndexString]))));
       console.log(uniqueValues);
       return {
         ...column,
-        filters: uniqueValues.map((value) => ({ text:  value==='null'?'Sin nivel superior' : value, value :  value==='null'?'Sin nivel superior' : value })),
-   
+        filters: uniqueValues.map((value) => ({ text: value === 'null' ? 'Sin nivel superior' : value, value: value === 'null' ? 'Sin nivel superior' : value })),
+
         onFilter: (value, record) => {
-          
-          const recordValue = String(record[dataIndexString])==='null'?'Sin nivel superior':String(record[dataIndexString]);
-  
+
+          const recordValue = String(record[dataIndexString]) === 'null' ? 'Sin nivel superior' : String(record[dataIndexString]);
+
           // Validación y filtrado sin sensibilidad a mayúsculas y minúsculas, y aplicando trim solo a 'nombre' y 'division_superior_nombre'
-          return typeof recordValue === 'string' && 
-          recordValue.trim().toLowerCase().includes(String(value).trim().toLowerCase());
+          return typeof recordValue === 'string' &&
+            recordValue.trim().toLowerCase().includes(String(value).trim().toLowerCase());
         },
       };
-    } 
+    }
     return column;
   });
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   const handleTableChange = (pagination, filters, sorter) => {
     setTableParams({
       pagination,
@@ -163,19 +163,19 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
 
 
 
-            rowKey={(record) => record.id}
+        rowKey={(record) => record.id}
 
         rowSelection={{
           type: selectionType,
           ...rowSelection,
         }}
-        columns={updatedColumns }
+        columns={updatedColumns}
         dataSource={divisiones}
         pagination={tableParams.pagination}
         loading={loading}
-         onChange={handleTableChange}
+        onChange={handleTableChange}
 
-         scroll={{
+        scroll={{
           y: 450,
         }}
       />
