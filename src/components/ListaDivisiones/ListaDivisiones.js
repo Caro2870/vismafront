@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Space } from 'antd';
 import axiosInstance from '../../services/axiosInstance';
-
+import AnadirSvg from '../svg/AnadirSvg';
 const columns = [
   {
     title: 'Division',
@@ -47,6 +47,15 @@ const columns = [
     key: 'subdivisiones',
     sorter: (a, b) => a.subdivisiones - b.subdivisiones,
     sortDirections: ['descend', 'ascend'],
+    render: (value) => (
+      <Space size="subdivisiones">
+       <span className="underline-link">{value ?  value: '0' }</span>
+
+        
+            <AnadirSvg />
+      
+      </Space>
+    ),
   },
   {
     title: 'Embajador Nombre',
