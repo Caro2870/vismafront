@@ -158,7 +158,7 @@ const ListaDivisiones = ({ searchValue, selectedValue }) => {
     }
   };
   return (
-    <div>
+    <div className='table-container'>
       <Table
 
 
